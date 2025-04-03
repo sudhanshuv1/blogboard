@@ -1,0 +1,109 @@
+.animate-move-slow {
+  animation: moveSlow 20s infinite;
+}
+
+.hover\:animate-vibrate:hover {
+  animation: vibrate 0.2s;
+}
+
+.truncated-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  line-clamp: 3; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+@keyframes moveSlow {
+    0% {
+      transform: translate(0, 0);
+    }
+    12.5% {
+      transform: translate(10px, -10px);
+    }
+    25% {
+      transform: translate(-10px, 10px);
+    }
+    37.5% {
+      transform: translate(-10px, -10px);
+    }
+    50% {
+      transform: translate(10px, 10px);
+    }
+    62.5% {
+      transform: translate(-10px, -10px);
+    }
+    75% {
+      transform: translate(-10px, 10px);
+    }
+    87.5% {
+      transform: translate(10px, -10px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes move-slow-1 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -20px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  @keyframes move-slow-2 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 20px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  @keyframes move-slow-3 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(20px, 20px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  @keyframes move-slow-4 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, -20px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  @keyframes move-slow-5 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+    100% { transform: translate(0, 0); }
+  }
+  
+  .animate-move-slow-1 {
+    animation: move-slow-1 10s infinite;
+  }
+  
+  .animate-move-slow-2 {
+    animation: move-slow-2 10s infinite;
+  }
+  
+  .animate-move-slow-3 {
+    animation: move-slow-3 10s infinite;
+  }
+  
+  .animate-move-slow-4 {
+    animation: move-slow-4 10s infinite;
+  }
+  
+  .animate-move-slow-5 {
+    animation: move-slow-5 10s infinite;
+  }
+
+  @keyframes vibrate {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    20%, 60% {
+      transform: translateX(-2px);
+    }
+    40%, 80% {
+      transform: translateX(2px);
+    }
+  }

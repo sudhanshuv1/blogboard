@@ -12,25 +12,38 @@ const CreateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const blog = await createBlog({name: name});  
-    navigate(`/blog/${blog.id}`, {state: blog.id});
+    navigate(`/blog/posts/${blog.id}`, {state: blog.id});
   }
     
 
   return (
-   <>
-   <p className="bg-green-100 text-green-800 px-1 mt-24 ml-12 rounded-lg w-fit absolute">
+   <main className="flex flex-col h-screen items-center justify-center">
+    <p className="bg-green-100 text-green-800 top-10 mx-10 rounded-lg w-fit absolute">
       {message}
     </p>
-    <main className="flex flex-col h-dvh items-center justify-center">
-     <div className="border-2 p-2 flex flex-col justify-center h-96 w-96">
-      <h2 className="text-2xl my-8">Give your blog a name</h2>
+    <section className="relative border-2 rounded-md shadow-md bg-gray-100 container py-2 px-8 flex flex-0 flex-col justify-center md:max-w-md h-96 md:h-80 lg:h-96 max-w-[80%]">
+    <h1 className="text-xl absolute top-2 left-1/2 transform -translate-x-1/2 text-center w-full">
+      Let's get started :)
+    </h1>        
+      <h2 className="text-gray-700 text-xl font-mono">Give your blog a name</h2>
       <form action="" className="flex flex-col justify-center">
-       <input type="text" placeholder="title" autoFocus className="border-2 border-black p-1" ref={inputRef} onChange = {(e) => setName(e.target.value)}/>
-       <button type="submit" className="ml-auto p-2 mt-8 border-2" onClick={(e) => handleSubmit(e)}>Create Blog</button>
+       <input 
+        type="text" 
+        placeholder="title" 
+        autoFocus 
+        className="border border-gray-300 rounded-md bg-gray-100 focus:bg-white focus:scale-y-110 p-2 outline-none" 
+        ref={inputRef} onChange = {(e) => setName(e.target.value)}
+      />
+       <button 
+        type="submit" 
+        className="absolute p-2 bottom-8 left-1/2 transform -translate-x-1/2 text-center rounded-md bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out" 
+        onClick={(e) => handleSubmit(e)}
+      >
+        Create Blog
+      </button>
       </form>
-     </div>
-    </main>
-   </>
+    </section>
+   </main>
   )
 }
 

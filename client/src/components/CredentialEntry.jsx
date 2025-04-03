@@ -1,10 +1,8 @@
-import { p } from 'framer-motion/m';
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { checkForDuplicate } from '../utils/api';
 
 const CredentialEntry = ({inputType, heading, placeholder, index, setIndex, createUser}) => {
 
-  
   const inputRef = useRef();
 
   const initialEntry = () => {
@@ -23,7 +21,6 @@ const CredentialEntry = ({inputType, heading, placeholder, index, setIndex, crea
 
   const [entry, setEntry] = useState(initialEntry());
   const [message, setMessage] = useState('');
-
 
   const handleInputChange = (e, key) => {
     setMessage('');
@@ -47,7 +44,7 @@ const CredentialEntry = ({inputType, heading, placeholder, index, setIndex, crea
   const nextCredential = async (e, input) => {
     e.preventDefault();
     if(input[0].length == 0) {
-      setMessage('Fields marked with * are required.');
+      setMessage('*Field is required.');
       return;
     }
     if(index == 0) {
@@ -88,44 +85,82 @@ const CredentialEntry = ({inputType, heading, placeholder, index, setIndex, crea
     createUser();
   }
 
-  const asterisk = <span className="absolute text-red-600 text-xl">*</span>
+  const asterisk = <span className="absolute text-red-600 text-sm">*</span>
 
   return (
-    <div className="border-2 p-4 flex flex-col justify-center h-96 w-96">
-      <h2 className="text-2xl my-8">{heading}{asterisk}</h2>
-      {
-        index == 1 ? (
-          <>
-          
-            First Name : <input type={inputType} autoFocus ref={inputRef} placeholder='John' className="border-2 border-black p-1 outline-none" value={entry[0]} onChange={(e) => handleInputChange(e, 0)}/>
-            <br />
-            Last Name : <input type={inputType} placeholder='Doe' className="border-2 border-black p-1 outline-none" value={entry[1]} onChange={(e) => handleInputChange(e, 1)}/>
-          </>
-        ) : (
-          <>
-            <input type={inputType} autoFocus ref={inputRef} placeholder={placeholder}  className="border-2 border-black p-1 outline-none" value={entry[0]} onChange={(e) => handleInputChange(e, 0)}/>
-          </>
-        )
-      }
-
-      <p className="text-red-600 my-4">{message}</p>
-
-      <div className="flex mt-8">
-
+    <>
+      <h1 className="text-gray-900 text-2xl text-center">Sign Up</h1>
+      <section className="flex-1 flex flex-col my-2 justify-center w-full flex-grow">
+        <h2 className="text-gray-700 text-xl font-mono">{heading}</h2>
         {
-          index > 0 && <button className="mr-auto border-2 border-black p-1" onClick={(e) => prevCredential(e)}>&lt;</button>
+          index == 1 ? (
+            <>
+              <span className="text-gray-700 font-mono text-xl">First Name</span> 
+              <input 
+                type={inputType} 
+                autoFocus 
+                ref={inputRef} 
+                placeholder='John' 
+                className="border border-gray-300 rounded-md bg-gray-100 focus:bg-white focus:scale-y-110 p-2 mb-4 outline-none" 
+                value={entry[0]} 
+                onChange={(e) => handleInputChange(e, 0)}
+              />
+              <br />
+              <span className="text-gray-700 font-mono text-xl">Last Name</span> 
+              <input 
+                type={inputType} 
+                placeholder='Doe' 
+                className="border border-gray-300 rounded-md bg-gray-100 focus:bg-white focus:scale-y-110 p-2 outline-none" 
+                value={entry[1]} 
+                onChange={(e) => handleInputChange(e, 1)}
+              />
+            </>
+          ) : (
+            <>
+              <input 
+                type={inputType} 
+                autoFocus 
+                ref={inputRef} 
+                placeholder={placeholder}  
+                className="border border-gray-300 rounded-md bg-gray-100 focus:bg-white focus:scale-y-110 p-2 outline-none" 
+                value={entry[0]} 
+                onChange={(e) => handleInputChange(e, 0)}
+              />
+            </>
+          )
         }
-
+        <p className="text-red-600 text-sm mt-6">{message}</p>
+      </section>
+      <div className="flex mt-auto">
+        {
+          index > 0 && 
+          <button 
+            className="mr-auto border-2 rounded-sm p-1 text-lg bg-gray-700 text-white border-black hover:scale-x-[2] scale-x-[1.8] duration-150 ease-in-out" 
+            onClick={(e) => prevCredential(e)}
+          >
+            &lt;
+          </button>
+        }
         {
           index == 3 ? (
-            <button className="ml-auto border-2 border-black p-1" type="submit" onClick={(e) => handleSubmit(e, entry)}>Create Account</button>
+            <button 
+              className="ml-auto border-2 rounded-md p-1 text-lg bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out" 
+              type="submit" 
+              onClick={(e) => handleSubmit(e, entry)}
+            >
+              Create Account
+            </button>
           ) : (
-            <button className="ml-auto border-2 border-black p-1" onClick={(e) => nextCredential(e, entry)}>Next</button>
+            <button 
+              className="ml-auto border-2 rounded-md p-1 text-lg bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out" 
+              onClick={(e) => nextCredential(e, entry)}
+            >
+              Continue
+            </button>
           )
         }
       </div>
-    </div>
-
+    </>
   )
 }
 

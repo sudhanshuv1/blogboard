@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -15,9 +14,6 @@ import Landing from './pages/Landing';
 import Wrapper from './components/Wrapper';
 
 function App() {
-
-
-
   return (
     <BrowserRouter>
       <Routes>
@@ -27,18 +23,14 @@ function App() {
         
         <Route path='/blog'>
           <Route index element={<CreateBlog />} />
-          <Route path=':blogId'>
-            <Route element={<Wrapper />}>
-              <Route index element={<Landing />} />
-              <Route path='post' >
-                <Route path=':postId' element={<EditPost />} />
-              </Route>
-              <Route path='layout' element={<Layout />} />
-              <Route path='themes' element = {<Themes />}/>
-              <Route path='views' element={<Views />}/>
-              <Route path='comments' element={<Comments />} />
-              <Route path='settings' element={<Settings />} />
-            </Route>
+          <Route path='/blog/' element={<Wrapper />}>
+            <Route path='posts/:blogId' element={<Landing />} />
+            <Route path='posts/:blogId/:postId' element={<EditPost />} />
+            <Route path='layout/:blogId' element={<Layout />} />
+            <Route path='themes/:blogId' element = {<Themes />}/>
+            <Route path='views/:blogId' element={<Views />} />
+            <Route path='comments/:blogId' element={<Comments />} />
+            <Route path='settings/:blogId' element={<Settings />} />
           </Route>
         </Route>
 

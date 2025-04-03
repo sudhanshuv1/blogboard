@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 // @route POST /blog
 // @access Private
 const createBlog = async (req, res) => {
+
     const id = req.id;
     const { name } = req.body;
 
@@ -22,6 +23,7 @@ const createBlog = async (req, res) => {
         data: {
             name: name,
             userId: id,
+            description: "",
         },
     });
 

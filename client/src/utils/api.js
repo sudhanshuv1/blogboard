@@ -5,6 +5,7 @@ const url = "http://localhost:5000";
 const login = async ({email, password}) => {
   try {
     const response = await axios.post(`${url}/auth`, {email, password});
+    console.log("Response = ", response);
     localStorage.setItem('token', response.data.accessToken);
     axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`;
     return response.data;
@@ -44,7 +45,6 @@ const signUp = async ({name, email, password}) => {
 
 const createBlog = async ({name}) => {
   try {
-
     const token = localStorage.getItem('token');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -93,7 +93,7 @@ const getBlog = async (id) => {
     const response = await axios.get(`${url}/blog/${id}`);
     return response.data;
   } catch (error) {
-    console.error(error)
+    return error.message;
   }
 }
 

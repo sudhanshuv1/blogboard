@@ -14,7 +14,7 @@ const Sidebar = () => {
   const sidebarLinks = [
     {
       text: 'Create Post',
-      path: 'post/:id',
+      path: '/blog/posts',
       icon: () => {
         return (
           <MdOutlinePostAdd className="inline text-3xl pb-1"/>
@@ -23,7 +23,7 @@ const Sidebar = () => {
     },
     {
       text: 'Home',
-      path: '',
+      path: '/blog/posts',
       icon: () => { 
         return (
           <IoHomeOutline className="inline text-3xl pb-1"/>
@@ -32,7 +32,7 @@ const Sidebar = () => {
     },
     {
       text: 'Layout',
-      path: 'layout',
+      path: '/blog/layout',
       icon: () => {
         return (
           <TbLayout2 className="inline text-3xl pb-1"/>
@@ -41,7 +41,7 @@ const Sidebar = () => {
     },
     {
       text: 'Themes',
-      path: 'themes',
+      path: '/blog/themes',
       icon: () => {
         return (
           <PiLayoutFill className="inline text-3xl pb-1"/>
@@ -50,7 +50,7 @@ const Sidebar = () => {
     },
     {
       text: 'Views',
-      path: 'views',
+      path: '/blog/views',
       icon: () => {
         return (
           <IoEye className="inline text-3xl pb-1"/>
@@ -59,7 +59,7 @@ const Sidebar = () => {
     },
     {
       text: 'Comments',
-      path: 'comments',
+      path: '/blog/comments',
       icon: () => {
         return (
           <LiaComments className="inline text-3xl pb-1"/>
@@ -68,7 +68,7 @@ const Sidebar = () => {
     },
     {
       text: 'Settings',
-      path: 'settings',
+      path: '/blog/settings',
       icon: () => {
         return (
           <IoSettingsOutline className="inline text-3xl pb-1"/>
@@ -77,9 +77,11 @@ const Sidebar = () => {
     }
   ];
 
-  const [isOpen, setIsOpen] = useState(true);
   const { pathname } = useLocation();
-  let selectedIndex = sidebarLinks.findIndex(link => link.path === pathname);
+  // Remove the blogId at the end of the pathname
+  const basePath = pathname.replace(/\/[^\/]+$/, '');
+
+  let selectedIndex = sidebarLinks.findIndex(link => link.path === basePath);
   const [selected, setSelected] = useState(selectedIndex);
 
   return (
@@ -94,6 +96,7 @@ const Sidebar = () => {
               path={link.path}
               icon={link.icon} 
               selected={selected}
+              setSelected={setSelected}
             />
           ))
         }

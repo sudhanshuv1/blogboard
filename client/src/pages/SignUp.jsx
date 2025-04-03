@@ -8,17 +8,17 @@ const SignUp = () => {
   let credentials = [
     {
       inputType: 'email',
-      heading: 'Enter your email',
-      placeholder: 'Email',
+      heading: 'What\'s your email?',
+      placeholder: 'yourname@example.com',
     },
     {
       inputType: 'text',
-      heading: 'Enter your Name',
+      heading: '',
       placeholder: '',
     },
     {
       inputType: 'password',
-      heading: 'Enter your password',
+      heading: 'Set a password',
       placeholder: '',
     },
     {
@@ -46,24 +46,22 @@ const SignUp = () => {
   }
 
   return (
-    <>
+    <main className="flex flex-col flex-grow items-center container min-w-[100vw] min-h-screen justify-center bg-gray-400">
       <Link to="/" className="absolute top-0 right-0 m-8">
         Back to Home
       </Link>
-      <main className="bg-gray-400 flex h-screen items-center justify-center">
-        <form action="">
-          <CredentialEntry 
-            key={index}
-            inputType={credentials[index].inputType}
-            heading={credentials[index].heading}
-            placeholder={credentials[index].placeholder}
-            index={index}
-            setIndex={setIndex}
-            createUser={createUser}
-          />
-        </form>
-      </main>
-    </>
+      <form className="border-2 rounded-md bg-white shadow-md bg-gray-100 container pt-2 pb-4 px-8 flex flex-0 flex-col justify-center w-full md:max-w-md h-96 md:h-80 lg:h-96 max-w-[80%]" action="">
+        <CredentialEntry 
+          key={index}
+          inputType={credentials[index].inputType}
+          heading={credentials[index].heading}
+          placeholder={credentials[index].placeholder}
+          index={index}
+          setIndex={setIndex}
+          createUser={createUser}
+        />
+      </form>
+    </main>
   )
 }
 

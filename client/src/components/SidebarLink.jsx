@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createPost } from '../utils/api'
 
-const SidebarLink = ({linkId, text, path, icon, selected}) => {
+const SidebarLink = ({linkId, text, path, icon, selected, setSelected}) => {
 
   const navigate = useNavigate();
 
@@ -13,17 +13,18 @@ const SidebarLink = ({linkId, text, path, icon, selected}) => {
 
   const handleClick = async () => {
 
-    if(path.includes('post')) {
+    setSelected(linkId);
+    if(text === 'Create Post') {
       const post = await createPost({
         blogId: blogId,
         title: '',
         content: ''
       })
       console.log(post);
-      navigate('/blog/' + blogId + '/post/' + post.id, { state: post });
+      navigate(path + '/' + blogId + '/' + post.id, { state: post });
     }
     else {
-      navigate('/blog/' + blogId + '/' + path);
+      navigate(path + '/' + blogId);
     }
   }
 

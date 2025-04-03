@@ -1,26 +1,32 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-
-  const navigate = useNavigate();
-
   return (
-    <nav className="flex w-full h-16 bg-black items-center fixed">
-      <Link 
-        to="/"
-        className="text-3xl font-bold text-white whitespace-nowrap mx-28"
-      >
-        .blogboard
+    <nav className="flex justify-between items-center p-4 bg-white shadow-md">
+      <Link to="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+        BLOGBOARD
       </Link>
-      <button onClick = {() => navigate('/sign-in')} className="border-black rounded text-gray-200 ml-auto p-2 hover:text-white">
-        Sign in
-      </button>
-      <button onClick = {() => navigate('/sign-up')} className="border-black rounded bg-blue-800 text-gray-200 ml-8 mr-28 p-2 hover:text-white">
-        Sign up
-      </button>
+      <div className="flex space-x-4">
+        <Link to="/" className="relative group text-black hover:text-blue-500">
+          Home
+          <span className="absolute left-1/2 transform -translate-x-1/2 top-6 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100"></span>
+        </Link>
+        <Link to="/sign-in" className="relative group text-black hover:text-blue-500">
+          Sign in
+          <span className="absolute left-1/2 transform -translate-x-1/2 top-6 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100"></span>
+        </Link>
+        <Link to="/about" className="relative group text-black hover:text-blue-500">
+          About
+          <span className="absolute left-1/2 transform -translate-x-1/2 top-6 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100"></span>
+        </Link>
+        <Link to="/contact" className="relative group text-black hover:text-blue-500">
+          Contact
+          <span className="absolute left-1/2 transform -translate-x-1/2 top-6 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100"></span>
+        </Link>
+      </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

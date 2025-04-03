@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -40,6 +41,8 @@ const login = async (req, res) => {
             "email": email
         }
     };
+
+    console.log("Blog of the logged in user = ", blog);
 
     const accessToken = jwt.sign (payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m' /* 30 min */});
     const refreshToken = jwt.sign (payload, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '30m' /* 7 days */});

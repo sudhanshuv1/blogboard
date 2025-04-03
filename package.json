@@ -1,0 +1,21 @@
+{
+  "name": "blogboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd client && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd client && npm run dev",
+    "server": "cd server && nodemon index.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "concurrently": "^9.1.2",
+    "quill": "^2.0.3",
+    "quill-image-drop-module": "^1.0.3"
+  }
+}

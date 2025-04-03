@@ -66,7 +66,7 @@ const signUp = async (req, res) => {
     });
 
     if(user && profile) {
-        res.status(201).json({message: `Your profile with email ${email} has been created.`})
+        res.status(201).json({message: `Your profile with email ${email} has been created!`})
     }
     else {
         res.status(400).json({message: "User could not be created."});
