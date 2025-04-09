@@ -58,9 +58,14 @@ const createBlog = async ({name}) => {
 
 const createPost = async ({blogId, title, content}) => {
   try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
     const response = await axios.post(`${url}/blog/post`, {blogId, title, content});
     return response.data;
   } catch (error) {
+    console.error("Error creating post:", error);
     return error;
   }
 }

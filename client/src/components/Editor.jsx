@@ -6,7 +6,6 @@ import { ImageDrop } from 'quill-image-drop-module';
  
 Quill.register('modules/imageDrop', ImageDrop);
 
-
 const Editor = forwardRef(
   ({ value, onTextChange, onSelectionChange }, ref) => {
     const containerRef = useRef(null);
