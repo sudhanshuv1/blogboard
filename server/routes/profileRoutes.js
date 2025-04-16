@@ -12,7 +12,7 @@ router.route('/email')
 
 router.use(verifyJWT);
 
-router.route('/')
+router.route('/:id')
     .get(profileController.getProfile)
     .patch(profileController.updateProfile)
     .delete(profileController.deleteProfile);

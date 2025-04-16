@@ -1,38 +1,42 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import Editor from '../components/Editor';
-import Quill from 'quill';
-import { updatePost } from '../utils/api';
+import { useUpdatePostMutation } from '../features/apiSlice';
 import 'quill/dist/quill.snow.css';
-
-const Delta = Quill.import('delta');
 
 const EditPost = () => {
   const { postId } = useParams();
   const location = useLocation();
   const post = location.state;
+
   const [title, setTitle] = useState(post?.title || '');
   const [content, setContent] = useState(post?.content || '');
 
+  const [updatePost, { isLoading, isError, error }] = useUpdatePostMutation();
+
   useEffect(() => {
-    const post = location.state;
     if (post) {
       setTitle(post.title);
       setContent(post.content);
     }
-  }, [postId]);
+  }, [post]);
 
-  // Use a ref to access the quill instance directly
+  
   const quillRef = useRef();
 
   const handleTextChange = (newContent) => {
     setContent(newContent);
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    updatePost(postId, title, content);
-    console.log('Post Updated');
+    try {
+      const updatedPost = await updatePost({ id: postId, updatedData: { title, content } }).unwrap();
+      console.log('Post Updated:', updatedPost);
+    } catch (err) {
+      console.error('Error updating post:', err);
+      alert(err.data?.message || 'An error occurred while updating the post.');
+    }
   };
 
   return (
@@ -49,11 +53,13 @@ const EditPost = () => {
         value={content}
         onTextChange={handleTextChange}
       />
+      {isError && <p className="text-red-500 text-center">{error?.data?.message || 'Failed to update post.'}</p>}
       <button
-        className="border-2 p-2 m-2 ml-auto mr-24 fixed bottom-5 right-10"
+        className="absolute p-2 bottom-8 left-1/2 transform -translate-x-1/2 text-center rounded-md bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out"
         onClick={handleClick}
+        disabled={isLoading}
       >
-        Publish
+        {isLoading ? 'Publishing...' : 'Publish'}
       </button>
     </main>
   );

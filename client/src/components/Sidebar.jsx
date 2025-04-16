@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import SidebarLink from './SidebarLink';
+import { useDispatch } from 'react-redux';
+import { setSelectedIndex } from '../features/uiSlice';
 import { useLocation } from 'react-router-dom';
 import { MdOutlinePostAdd } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
@@ -48,6 +49,8 @@ const Sidebar = () => {
     },
   ];
 
+
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
 
   // Extract blogId and postId from the pathname
@@ -55,11 +58,11 @@ const Sidebar = () => {
   const basePath = pathname.replace(/\/[^\/]+$/, '');
 
   // Determine the initial selected index
-  let selectedIndex = sidebarLinks.findIndex((link) => link.path === basePath);
+  let selected = sidebarLinks.findIndex((link) => link.path === basePath);
 
   // If both blogId and postId exist, set selectedIndex to 1
   if (pathSegments.length > 4) {
-    selectedIndex = 1;
+    selected = 1;
   }
 
   console.log("PATH SEGMENTS ARRAY : ", pathSegments, "\n");
@@ -67,7 +70,7 @@ const Sidebar = () => {
   console.log("PATHNAME: ", pathname, "\nPATH SEGEMENT 1 : ", pathSegments[2], "\nPATH SEGMENT 2 : ", pathSegments[3]);
   console.log("BASE PATH : ", basePath);
 
-  const [selected, setSelected] = useState(selectedIndex);
+  dispatch(setSelectedIndex(selected));
 
   return (
     <section className="fixed mr-auto h-[calc(100vh-3rem)] border-2 w-60 top-14">
@@ -79,8 +82,6 @@ const Sidebar = () => {
             text={link.text}
             path={link.path}
             icon={link.icon}
-            selected={selected}
-            setSelected={setSelected}
           />
         ))}
       </ul>
