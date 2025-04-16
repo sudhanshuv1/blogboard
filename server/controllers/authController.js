@@ -49,17 +49,15 @@ const login = async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-    //    secure: true,
         sameSite: 'None',
         maxAge: 7*24*60*60*1000
     });
 
     if(!blog) {
-        res.json({ accessToken });
+        res.json({ "accessToken" : accessToken, "user" : foundUser });
     }
     else {
-        const blogId = blog.id;
-        res.json({ "accessToken" : accessToken, "blogId": blogId });
+        res.json({ "accessToken" : accessToken, "user": foundUser, "blog": blog });
     }
 }
 

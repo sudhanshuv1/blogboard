@@ -20,7 +20,6 @@ const EditPost = () => {
       setContent(post.content);
     }
   }, [post]);
-
   
   const quillRef = useRef();
 

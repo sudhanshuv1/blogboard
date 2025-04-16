@@ -12,5 +12,5 @@ const uiSlice = createSlice({
   },
 });
 
-export const {setSelected} = uiSlice.actions;
+export const {setSelectedIndex} = uiSlice.actions;
 export default uiSlice.reducer;

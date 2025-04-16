@@ -14,7 +14,7 @@ const Header = () => {
   const handleLogout = () => {
     // Clear any authentication tokens or user data
     localStorage.clear();
-    navigate('/signin'); // Redirect to the sign-in page
+    navigate('/'); // Redirect to the homepage
   };
 
   return (
@@ -22,7 +22,7 @@ const Header = () => {
       <Link to={`${pathname}`}>
         <h2 className="text-xl font-bold mr-auto ml-12">.blogboard</h2>
       </Link>
-      <div className="relative mr-12">
+      <div className="relative mr-12 ml-auto">
         <button
           className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden"
           onClick={() => setShowDropdown((prev) => !prev)}

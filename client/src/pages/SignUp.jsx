@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CredentialEntry from '../components/CredentialEntry';
 import { useSignUpMutation, useLoginMutation } from '../features/apiSlice';
+import { login as loginAction } from '../features/authSlice';
 
 const SignUp = () => {
   let credentials = [
@@ -43,10 +44,17 @@ const SignUp = () => {
 
       localStorage.clear();
 
-      await login({
+      const data = await login({
         email: localStorage.getItem('email'),
         password: localStorage.getItem('password'),
       }).unwrap();
+
+      dispatch(
+        loginAction({
+          user: data.user,
+          accessToken: data.accessToken,
+        })
+      );
 
       navigate('/blog', { state: signUpResponse.message });
     } catch (err) {
@@ -57,8 +65,9 @@ const SignUp = () => {
 
   return (
     <main className="flex flex-col flex-grow items-center container min-w-[100vw] min-h-screen justify-center bg-gray-400">
-      <Link to="/" className="absolute top-0 right-0 m-8">
+      <Link to="/" className="absolute top-0 right-0 m-8 group text-black hover:text-blue-500">
         Back to Home
+        <span className="absolute left-1/2 transform -translate-x-1/2 top-6 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100"></span>
       </Link>
       <form className="border-2 rounded-md bg-white shadow-md bg-gray-100 container pt-2 pb-4 px-8 flex flex-0 flex-col justify-center w-full md:max-w-md h-96 md:h-80 lg:h-96 max-w-[80%]" action="">
         <CredentialEntry

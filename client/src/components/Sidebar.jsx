@@ -1,5 +1,6 @@
 import SidebarLink from './SidebarLink';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrentBlog } from '../features/authSlice';
 import { setSelectedIndex } from '../features/uiSlice';
 import { useLocation } from 'react-router-dom';
 import { MdOutlinePostAdd } from "react-icons/md";
@@ -49,7 +50,7 @@ const Sidebar = () => {
     },
   ];
 
-
+  const blogName = useSelector(selectCurrentBlog).name;
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
@@ -75,6 +76,9 @@ const Sidebar = () => {
   return (
     <section className="fixed mr-auto h-[calc(100vh-3rem)] border-2 w-60 top-14">
       <ul className="p-2 h-3/6 flex flex-col justify-around">
+        <li className='pl-8 my-2 h-14 rounded p-2 font-semibold w-full hover:cursor-pointer'>
+          {blogName}
+        </li>
         {sidebarLinks.map((link, index) => (
           <SidebarLink
             key={index}

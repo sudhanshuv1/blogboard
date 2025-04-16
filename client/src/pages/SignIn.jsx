@@ -1,9 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../features/apiSlice';
+import { useDispatch } from 'react-redux';
+import { login as loginAction } from '../features/authSlice';
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize Redux dispatch
   const inputRef = useRef();
 
   const [email, setEmail] = useState('');
@@ -16,12 +19,18 @@ const SignIn = () => {
     e.preventDefault();
     try {
       const data = await login({ email, password }).unwrap();
-      if (data.message) {
-        setMessage(data.message);
-        return;
-      }
-      if (data.blogId) {
-        navigate(`/blog/posts/${data.blogId}`);
+      console.log('Login successful:', data);
+      // Dispatch login action to update Redux state and localStorage
+      dispatch(
+        loginAction({
+          user: data.user,
+          blog: data.blog,
+          accessToken: data.accessToken,
+        })
+      );
+
+      if (data.blog) {
+        navigate(`/blog/posts/${data.blog.id}`);
       } else {
         navigate('/blog');
       }
