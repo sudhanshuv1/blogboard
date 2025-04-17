@@ -6,12 +6,13 @@ const authSlice = createSlice({
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null, // Safely parse user
     token: localStorage.getItem('token') || null, // Load token from localStorage
     isAuthenticated: !!localStorage.getItem('token'), // Check if token exists
+    blog: null, // Initialize blog as null
   },
   reducers: {
     login: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.accessToken; // Store accessToken as token
-      state.blog = action.payload.blog; // Store blogId (optional)
+      state.blog = action.payload.blog; // Store blog (optional)
       state.isAuthenticated = true;
 
       // Store user, token, and blogId in localStorage
@@ -28,10 +29,13 @@ const authSlice = createSlice({
       localStorage.removeItem('user');
       localStorage.removeItem('token');
     },
+    setBlog: (state, action) => {
+      state.blog = action.payload; // Update only the blog field
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setBlog } = authSlice.actions;
 export const selectCurrentUser = (state) => state.auth.user;
-export const selectCurrentBlog = (state) => state.auth.blog; // Optional: if you want to access blogId
+export const selectCurrentBlog = (state) => state.auth.blog; // Optional: if you want to access blog
 export default authSlice.reducer;

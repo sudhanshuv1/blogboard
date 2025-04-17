@@ -26,7 +26,7 @@ export const apiSlice = createApi({
       query: (email) => ({
         url: '/profile/email',
         method: 'POST',
-        body: { email },
+        body: email,
       }),
     }),
     getProfile: builder.query({

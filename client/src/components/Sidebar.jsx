@@ -50,7 +50,8 @@ const Sidebar = () => {
     },
   ];
 
-  const blogName = useSelector(selectCurrentBlog).name;
+  const blog = useSelector(selectCurrentBlog); // Get the current blog
+  const blogName = blog?.name || 'Loading...'; // Fallback to avoid undefined errors
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 

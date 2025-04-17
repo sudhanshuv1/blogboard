@@ -23,9 +23,17 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
   const [entry, setEntry] = useState(initialEntry());
   const [message, setMessage] = useState('');
 
-  const { data: isDuplicate, isLoading, isError, error } = useCheckForDuplicateQuery(entry[0], {
-    skip: index !== 0 || entry[0].length === 0, 
-  });
+  const { data, isLoading, isError, error } = useCheckForDuplicateQuery(
+    { email: entry[0] },
+    {
+      skip: index !== 0 || entry[0].length === 0, // Skip the query if not on the email step or email is empty
+    }
+  );
+
+  // Determine if the email is a duplicate based on the server response
+  const isDuplicate = !data ? true : false;
+
+  console.log('Query Data:', isDuplicate);
 
   const handleInputChange = (e, key) => {
     setMessage('');
@@ -58,6 +66,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
         setMessage('Please enter a valid email.');
         return;
       }
+
       if (isLoading) {
         setMessage('Checking for duplicate email...');
         return;
@@ -72,6 +81,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
       }
     }
     if (index === 2 && input[0].length < 8) {
+      setMessage('Password must be at least 8 characters long.');
       return;
     }
     switch (index) {
@@ -96,9 +106,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
     }
     createUser();
   };
-
-  const asterisk = <span className="absolute text-red-600 text-sm">*</span>;
-
+  
   return (
     <>
       <h1 className="text-gray-900 text-2xl text-center">Sign Up</h1>

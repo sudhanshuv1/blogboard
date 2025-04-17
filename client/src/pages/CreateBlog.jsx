@@ -1,22 +1,25 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCreateBlogMutation } from '../features/apiSlice';
+import { useDispatch } from 'react-redux';
+import { setBlog } from '../features/authSlice';
 
 const CreateBlog = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const [name, setName] = useState('');
   const message = location.state;
 
-  
   const [createBlog, { isLoading, isError, error }] = useCreateBlogMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const blog = await createBlog({ name }).unwrap(); 
-      navigate(`/blog/posts/${blog.id}`, { state: blog.id });
+      const blog = await createBlog({ name }).unwrap(); // Create the blog
+      dispatch(setBlog(blog)); // Update the blog in the auth slice
+      navigate(`/blog/posts/${blog.id}`, { state: blog.id }); // Navigate to the blog's posts page
     } catch (err) {
       console.error('Error creating blog:', err);
       alert(err.data?.message || 'An error occurred while creating the blog.');
@@ -38,7 +41,7 @@ const CreateBlog = () => {
         <form
           action=""
           className="flex flex-col justify-center"
-          onSubmit={handleSubmit} 
+          onSubmit={handleSubmit}
         >
           <input
             type="text"
@@ -56,7 +59,7 @@ const CreateBlog = () => {
           <button
             type="submit"
             className="absolute p-2 bottom-8 left-1/2 transform -translate-x-1/2 text-center rounded-md bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out"
-            disabled={isLoading} 
+            disabled={isLoading}
           >
             {isLoading ? 'Creating...' : 'Create Blog'}
           </button>

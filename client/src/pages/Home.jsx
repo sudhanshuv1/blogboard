@@ -16,7 +16,7 @@ const Home = () => {
           <img src="https://via.placeholder.com/600x400" alt="Placeholder" className="rounded-lg shadow-lg w-full" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mt-10">
-          Write Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Article</span> here
+          {'{'} Write Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Article</span> here { '}' }
         </h1> 
         <Link to="/sign-up" className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-full shadow-lg hover:animate-vibrate">
           Create Account

@@ -44,8 +44,8 @@ const login = async (req, res) => {
 
     console.log("Blog of the logged in user = ", blog);
 
-    const accessToken = jwt.sign (payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m' /* 30 min */});
-    const refreshToken = jwt.sign (payload, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '30m' /* 7 days */});
+    const accessToken = jwt.sign (payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '50m' /* 30 min */});
+    const refreshToken = jwt.sign (payload, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '60m' /* 7 days */});
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,

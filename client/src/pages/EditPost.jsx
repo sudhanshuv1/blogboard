@@ -20,21 +20,17 @@ const EditPost = () => {
       setContent(post.content);
     }
   }, [post]);
-  
+
   const quillRef = useRef();
 
   const handleTextChange = (newContent) => {
     setContent(newContent);
   };
 
-  const handleClick = async (e) => {
+  const handlePublish = async (e) => {
     e.preventDefault();
-    try {
-      const updatedPost = await updatePost({ id: postId, updatedData: { title, content } }).unwrap();
-      console.log('Post Updated:', updatedPost);
-    } catch (err) {
-      console.error('Error updating post:', err);
-      alert(err.data?.message || 'An error occurred while updating the post.');
+    if (quillRef.current) {
+      await quillRef.current.handlePublish(title, postId, updatePost);
     }
   };
 
@@ -43,7 +39,7 @@ const EditPost = () => {
       <input
         type="text"
         placeholder="Title"
-        className="outline-none border-0 border-b-2 w-5/6 h-8 p-2 mx-auto mb-1 text-lg text-center"
+        className="outline-none border-0 border-b-2 w-5/6 h-8 px-2 mx-auto mb-1 text-lg text-center"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -55,7 +51,7 @@ const EditPost = () => {
       {isError && <p className="text-red-500 text-center">{error?.data?.message || 'Failed to update post.'}</p>}
       <button
         className="absolute p-2 bottom-8 left-1/2 transform -translate-x-1/2 text-center rounded-md bg-gray-700 text-white border-black hover:scale-x-110 duration-150 ease-in-out"
-        onClick={handleClick}
+        onClick={handlePublish}
         disabled={isLoading}
       >
         {isLoading ? 'Publishing...' : 'Publish'}

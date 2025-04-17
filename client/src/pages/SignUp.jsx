@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CredentialEntry from '../components/CredentialEntry';
 import { useSignUpMutation, useLoginMutation } from '../features/apiSlice';
 import { login as loginAction } from '../features/authSlice';
+import { useDispatch } from 'react-redux';
 
 const SignUp = () => {
   let credentials = [
@@ -29,6 +30,7 @@ const SignUp = () => {
   ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [index, setIndex] = useState(0);
 
   const [signUp, { isLoading: isSignUpLoading, isError: isSignUpError, error: signUpError }] = useSignUpMutation();
@@ -42,12 +44,12 @@ const SignUp = () => {
         password: localStorage.getItem('password'),
       }).unwrap();
 
-      localStorage.clear();
-
       const data = await login({
         email: localStorage.getItem('email'),
         password: localStorage.getItem('password'),
       }).unwrap();
+
+      localStorage.clear();
 
       dispatch(
         loginAction({
