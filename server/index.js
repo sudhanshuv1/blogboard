@@ -13,9 +13,14 @@ app.use(logger);
 
 app.use(cors(corsOptions));
 
+// Increase the payload size limit for JSON and URL-encoded data
+app.use(express.json({ limit: '10mb' })); // Adjust the limit as needed
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 app.use(express.json());
 
 app.use(cookieParser());
+
 
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/users', require('./routes/userRoutes'));

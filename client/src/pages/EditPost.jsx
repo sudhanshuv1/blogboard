@@ -18,6 +18,7 @@ const EditPost = () => {
     if (post) {
       setTitle(post.title);
       setContent(post.content);
+      console.log('Post content:', post.content);
     }
   }, [post]);
 
