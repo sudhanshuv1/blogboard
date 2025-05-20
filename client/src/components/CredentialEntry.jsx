@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useCheckForDuplicateQuery } from '../features/apiSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, createUser }) => {
   const inputRef = useRef();
@@ -22,6 +24,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
 
   const [entry, setEntry] = useState(initialEntry());
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const { data, isLoading, isError, error } = useCheckForDuplicateQuery(
     { email: entry[0] },
@@ -110,7 +113,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
   return (
     <>
       <h1 className="text-gray-900 text-2xl text-center">Sign Up</h1>
-      <section className="flex-1 flex flex-col my-2 justify-center w-full flex-grow">
+      <section className="flex-1 flex flex-col my-2 justify-center relative w-full flex-grow">
         <h2 className="text-gray-700 text-xl font-mono">{heading}</h2>
         {index === 1 ? (
           <>
@@ -137,7 +140,7 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
         ) : (
           <>
             <input
-              type={inputType}
+              type={inputType === 'password' ? showPassword ? 'text' : 'password' : inputType}
               autoFocus
               ref={inputRef}
               placeholder={placeholder}
@@ -145,6 +148,15 @@ const CredentialEntry = ({ inputType, heading, placeholder, index, setIndex, cre
               value={entry[0]}
               onChange={(e) => handleInputChange(e, 0)}
             />
+            {(index === 2 || index == 3) && (
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 bottom-27 mt-1 text-gray-400 hover:text-gray-500"
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </button>
+            )}
           </>
         )}
         <p className="text-red-600 text-sm mt-6">{message}</p>

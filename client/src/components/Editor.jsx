@@ -30,64 +30,102 @@ const Editor = forwardRef(
       enable: (value) => {
         quillRef.current.enable(value);
       },
-      handlePublish: async (title, postId, updatePost) => {
-        if (!quillRef.current) return;
+    }));
 
-        const content = quillRef.current.root.innerHTML; // Get the current content of the editor
-        const currentDelta = quillRef.current.getContents(); // Get the current Delta of the editor
-        console.log('Current Delta:', currentDelta);
+const handlePublish = async (title, postId, updatePost) => {
+  if (!quillRef.current) return;
 
-        // Compute the difference between initialDelta and currentDelta
-        const diffDelta = initialDeltaRef.current.diff(currentDelta);
-        console.log('Diff Delta:', diffDelta);
+  const content = quillRef.current.root.innerHTML; // Get the current content of the editor
+  const currentDelta = quillRef.current.getContents(); // Get the current Delta of the editor
+  console.log('Current Delta:', currentDelta);
 
-        // Extract added and removed images/videos
-        const addedMedia = [];
-        const removedMedia = [];
-        diffDelta.ops.forEach((op) => {
-          if (op.insert && op.insert.image) {
-            addedMedia.push(op.insert.image); // Collect added images
+  // Compute the difference between initialDelta and currentDelta
+  const diffDelta = initialDeltaRef.current.diff(currentDelta);
+  console.log('Diff Delta:', diffDelta);
+
+  // Extract added and removed images/videos
+  const addedMedia = [];
+  const removedMedia = [];
+  diffDelta.ops.forEach((op) => {
+    if (op.insert && op.insert.image) {
+      addedMedia.push(op.insert.image); // Collect added images
+    }
+    if (op.delete) {
+      // Find the deleted content in the initial delta
+      let deletedIndex = 0;
+      initialDeltaRef.current.ops.forEach((initialOp) => {
+        if (initialOp.retain) {
+          deletedIndex += initialOp.retain;
+        } else if (initialOp.insert) {
+          if (deletedIndex < op.delete) {
+            if (initialOp.insert.image) {
+              removedMedia.push(initialOp.insert.image); // Collect removed images
+            }
+            deletedIndex++;
           }
-          if (op.insert && op.insert.video) {
-            addedMedia.push(op.insert.video); // Collect added videos
-          }
-          if (op.delete) {
-            // Find the deleted content in the initial delta
-            let deletedIndex = 0;
-            initialDeltaRef.current.ops.forEach((initialOp) => {
-              if (initialOp.retain) {
-                deletedIndex += initialOp.retain;
-              } else if (initialOp.insert) {
-                if (deletedIndex < op.delete) {
-                  if (initialOp.insert.image) {
-                    removedMedia.push(initialOp.insert.image); // Collect removed images
-                  }
-                  if (initialOp.insert.video) {
-                    removedMedia.push(initialOp.insert.video); // Collect removed videos
-                  }
-                  deletedIndex++;
-                }
-              }
-            });
-          }
+        }
+      });
+    }
+  });
+
+  console.log('Added Media:', addedMedia);
+  console.log('Removed Media:', removedMedia);
+
+  // Upload added media to S3
+  for (const media of addedMedia) {
+    if (media.startsWith('data:')) {
+      try {
+        const base64Data = media.split(',')[1]; // Extract the Base64 data
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.jpg`; // Generate a unique file name
+
+        // Request a pre-signed URL from the server
+        const { data: presignedUrl } = await axios.get('/api/s3/generate-presigned-url', {
+          params: { fileName, fileType: 'image/jpeg' },
         });
 
-        console.log('Added Media:', addedMedia);
-        console.log('Removed Media:', removedMedia);
+        // Upload the file to S3 using the pre-signed URL
+        await axios.put(presignedUrl, Buffer.from(base64Data, 'base64'), {
+          headers: { 'Content-Type': 'image/jpeg' },
+        });
 
-        try {
-          const updatedPost = await updatePost({ id: postId, updatedData: { title, content } }).unwrap();
-          console.log('Post Updated:', updatedPost);
-          if (onPublish) onPublish(updatedPost); // Notify parent component if needed
-        } catch (err) {
-          console.error('Error updating post:', err);
-          alert(err.data?.message || 'An error occurred while updating the post.');
+        // Replace the Base64 src with the S3 URL in the content
+        const s3Url = presignedUrl.split('?')[0]; // Remove query params from the URL
+        const mediaElement = quillRef.current.root.querySelector(`img[src="${media}"]`);
+        if (mediaElement) {
+          mediaElement.setAttribute('src', s3Url);
         }
+      } catch (err) {
+        console.error('Error uploading media to S3:', err);
+      }
+    }
+  }
 
-        // Reset initialDeltaRef to the current delta after publishing
-        initialDeltaRef.current = currentDelta;
-      },
-    }), []);
+  // Delete removed media from S3
+  for (const media of removedMedia) {
+    try {
+      const fileName = media.split('/').pop(); // Extract the file name from the URL
+      await axios.delete(`/api/s3/delete-object`, { data: { fileName } });
+    } catch (err) {
+      console.error('Error deleting media from S3:', err);
+    }
+  }
+
+  try {
+    // Serialize the updated content back to HTML
+    const updatedContent = quillRef.current.root.innerHTML;
+
+    // Update the post in the database
+    const updatedPost = await updatePost({ id: postId, updatedData: { title, content: updatedContent } }).unwrap();
+    console.log('Post Updated:', updatedPost);
+    if (onPublish) onPublish(updatedPost); // Notify parent component if needed
+  } catch (err) {
+    console.error('Error updating post:', err);
+    alert(err.data?.message || 'An error occurred while updating the post.');
+  }
+
+  // Reset initialDeltaRef to the current delta after publishing
+  initialDeltaRef.current = currentDelta;
+};
 
     useEffect(() => {
       const container = containerRef.current;

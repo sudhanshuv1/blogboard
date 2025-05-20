@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../features/apiSlice';
 import { useDispatch } from 'react-redux';
 import { login as loginAction } from '../features/authSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 
 const SignIn = () => {
   
@@ -13,6 +16,7 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [login, { isLoading, isError, error }] = useLoginMutation();
 
@@ -55,7 +59,7 @@ const SignIn = () => {
         <h1 className="text-xl absolute top-2 left-1/2 transform -translate-x-1/2 text-center w-full">
           Login to Blogboard
         </h1>
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center relative justify-center">
           <input
             type="email"
             placeholder="Email"
@@ -66,12 +70,19 @@ const SignIn = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Password"
             required
             className="border border-gray-300 rounded-md w-full bg-gray-100 focus:bg-white focus:scale-y-110 p-2 mb-4 outline-none"
             onChange={(e) => setPassword(e.target.value)}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 bottom-6 text-gray-400 hover:text-gray-500"
+          >
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </button>
         </div>
         {isError && <p className="text-red-500 m-2">{error?.data?.message || 'Login failed.'}</p>}
         <p className="text-red-500 m-2">{message}</p>
